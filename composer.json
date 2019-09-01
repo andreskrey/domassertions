@@ -1,0 +1,24 @@
+{
+  "name": "andreskrey/domassertions",
+  "description": "Custom PHPUnit assertions for DOMDocument objects",
+  "type": "phpunit-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andres Rey",
+      "email": "andreskrey@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "ext-dom": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "andreskrey\\PHPUnit\\": "src/"
+    }
+  }
+}
