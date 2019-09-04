@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace andreskrey\PHPUnit\Constraint;
 
+use andreskrey\PHPUnit\Comparator\NodeComparator;
+use andreskrey\PHPUnit\Iterator\NodeIterator;
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**
@@ -31,7 +33,8 @@ class SameDOMDocumentStructure extends Constraint
      */
     protected function matches($other): bool
     {
-        return false;
+        $test = $this->compareDocuments($this->original, $other, new NodeComparator());
+        $test1 = 1;
     }
 
     /**
@@ -40,5 +43,28 @@ class SameDOMDocumentStructure extends Constraint
     public function toString(): string
     {
         return 'same DOMDocument structure';
+    }
+
+    protected function compareDocuments(\DOMDocument $original, \DOMDocument $other, NodeComparator $comparator): bool
+    {
+        $failures = false;
+        $lhs = new NodeIterator($original);
+        $rhs = new NodeIterator($other);
+
+        while ($lhs->valid()) {
+            try {
+                if (!$comparator->compare($lhs->current(), $rhs->current())) {
+                    throw new \UnexpectedValueException();
+                }
+
+                $lhs->next();
+                $rhs->next();
+            } catch (\OutOfBoundsException | \UnexpectedValueException $exception) {
+                $failures = true;
+                $lhs->current()->setIsEqual(false);
+            }
+        }
+
+        return $failures;
     }
 }

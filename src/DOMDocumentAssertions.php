@@ -31,4 +31,3 @@ trait DOMDocumentAssertions
         return new Constraint\SameDOMDocumentStructure($document);
     }
 }
-
