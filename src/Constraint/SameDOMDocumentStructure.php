@@ -65,7 +65,6 @@ class SameDOMDocumentStructure extends Constraint
     protected function traverse(DOMNodeIterator $lhs, DOMNodeIterator $rhs)
     {
         while ($lhs->valid()) {
-            echo $lhs->getDepth() . PHP_EOL;
             try {
                 if (!$this->comparator->compare($lhs->current(), $rhs->current())) {
                     throw new \UnexpectedValueException();
