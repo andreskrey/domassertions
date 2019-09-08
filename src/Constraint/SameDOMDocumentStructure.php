@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace andreskrey\PHPUnit\Constraint;
 
 use andreskrey\PHPUnit\Comparator\NodeComparator;
-use andreskrey\PHPUnit\Iterator\NodeIterator;
+use andreskrey\PHPUnit\Iterator\DOMNodeIterator;
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**
@@ -19,13 +19,20 @@ class SameDOMDocumentStructure extends Constraint
     protected $original;
 
     /**
+     * @var NodeComparator
+     */
+    protected $comparator;
+
+    /**
      * SameDOMDocumentStructure constructor.
      *
      * @param \DOMDocument $document
+     * @param NodeComparator $comparator
      */
-    public function __construct(\DOMDocument $document)
+    public function __construct(\DOMDocument $document, NodeComparator $comparator)
     {
         $this->original = $document;
+        $this->comparator = $comparator;
     }
 
     /**
@@ -33,7 +40,7 @@ class SameDOMDocumentStructure extends Constraint
      */
     protected function matches($other): bool
     {
-        $test = $this->compareDocuments($this->original, $other, new NodeComparator());
+        $test = $this->compareDocuments($this->original, $other);
         $test1 = 1;
     }
 
@@ -45,26 +52,38 @@ class SameDOMDocumentStructure extends Constraint
         return 'same DOMDocument structure';
     }
 
-    protected function compareDocuments(\DOMDocument $original, \DOMDocument $other, NodeComparator $comparator): bool
+    protected function compareDocuments(\DOMDocument $original, \DOMDocument $other): bool
     {
-        $failures = false;
-        $lhs = new NodeIterator($original);
-        $rhs = new NodeIterator($other);
+        $lhs = new DOMNodeIterator($original);
+        $rhs = new DOMNodeIterator($other);
 
+        $result = $this->traverse($lhs, $rhs);
+
+        return $failures;
+    }
+
+    protected function traverse(DOMNodeIterator $lhs, DOMNodeIterator $rhs)
+    {
         while ($lhs->valid()) {
+            echo $lhs->getDepth() . PHP_EOL;
             try {
-                if (!$comparator->compare($lhs->current(), $rhs->current())) {
+                if (!$this->comparator->compare($lhs->current(), $rhs->current())) {
                     throw new \UnexpectedValueException();
+                }
+
+                if ($lhs->hasChildren()) {
+                    if ($rhs->hasChildren()) {
+                        $this->traverse($lhs->getChildren(), $rhs->getChildren());
+                    } else{
+                        throw new \UnexpectedValueException();
+                    }
                 }
 
                 $lhs->next();
                 $rhs->next();
-            } catch (\OutOfBoundsException | \UnexpectedValueException $exception) {
-                $failures = true;
+            } catch (\UnexpectedValueException $exception) {
                 $lhs->current()->setIsEqual(false);
             }
         }
-
-        return $failures;
     }
 }

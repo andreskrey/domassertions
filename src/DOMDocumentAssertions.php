@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace andreskrey\PHPUnit;
 
+use andreskrey\PHPUnit\Comparator\NodeComparator;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -28,6 +29,6 @@ trait DOMDocumentAssertions
      */
     public static function sameDOMDocumentStructure(\DOMDocument $document): Constraint\SameDOMDocumentStructure
     {
-        return new Constraint\SameDOMDocumentStructure($document);
+        return new Constraint\SameDOMDocumentStructure($document, new NodeComparator());
     }
 }
