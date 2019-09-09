@@ -23,6 +23,8 @@ class SameDOMDocumentStructure extends Constraint
      */
     protected $comparator;
 
+    protected $ok = true;
+
     /**
      * SameDOMDocumentStructure constructor.
      *
@@ -40,8 +42,7 @@ class SameDOMDocumentStructure extends Constraint
      */
     protected function matches($other): bool
     {
-        $test = $this->compareDocuments($this->original, $other);
-        $test1 = 1;
+        return $this->compareDocuments($this->original, $other);
     }
 
     /**
@@ -59,13 +60,17 @@ class SameDOMDocumentStructure extends Constraint
 
         $result = $this->traverse($lhs, $rhs);
 
-        return $failures;
+        return $this->ok;
     }
 
     protected function traverse(DOMNodeIterator $lhs, DOMNodeIterator $rhs)
     {
         while ($lhs->valid()) {
             try {
+                if (null === $rhs->current()) {
+                    throw new \UnexpectedValueException();
+                }
+
                 if (!$this->comparator->compare($lhs->current(), $rhs->current())) {
                     throw new \UnexpectedValueException();
                 }
@@ -73,15 +78,16 @@ class SameDOMDocumentStructure extends Constraint
                 if ($lhs->hasChildren()) {
                     if ($rhs->hasChildren()) {
                         $this->traverse($lhs->getChildren(), $rhs->getChildren());
-                    } else{
+                    } else {
                         throw new \UnexpectedValueException();
                     }
                 }
-
+            } catch (\UnexpectedValueException $exception) {
+//                $lhs->current()->setIsEqual(false);
+                $this->ok = false;
+            } finally {
                 $lhs->next();
                 $rhs->next();
-            } catch (\UnexpectedValueException $exception) {
-                $lhs->current()->setIsEqual(false);
             }
         }
     }

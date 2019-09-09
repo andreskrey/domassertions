@@ -31,7 +31,7 @@ class DOMNodeIterator implements \RecursiveIterator
             return $this->node->childNodes->item($this->cursor);
         }
 
-        return false;
+        return null;
     }
 
     /**
