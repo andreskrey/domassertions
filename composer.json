@@ -11,7 +11,8 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "ext-dom": "*"
+    "ext-dom": "*",
+    "ext-mbstring": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.3"

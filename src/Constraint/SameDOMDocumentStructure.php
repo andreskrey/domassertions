@@ -23,8 +23,6 @@ class SameDOMDocumentStructure extends Constraint
      */
     protected $comparator;
 
-    protected $ok = true;
-
     /**
      * SameDOMDocumentStructure constructor.
      *
@@ -50,7 +48,7 @@ class SameDOMDocumentStructure extends Constraint
      */
     public function toString(): string
     {
-        return 'same DOMDocument structure';
+        return 'has same DOMDocument structure';
     }
 
     protected function compareDocuments(\DOMDocument $original, \DOMDocument $other): bool
@@ -59,8 +57,6 @@ class SameDOMDocumentStructure extends Constraint
         $rhs = new DOMNodeIterator($other);
 
         $result = $this->traverse($lhs, $rhs);
-
-        return $this->ok;
     }
 
     protected function traverse(DOMNodeIterator $lhs, DOMNodeIterator $rhs)
@@ -71,20 +67,22 @@ class SameDOMDocumentStructure extends Constraint
                     throw new \UnexpectedValueException();
                 }
 
-                if (!$this->comparator->compare($lhs->current(), $rhs->current())) {
-                    throw new \UnexpectedValueException();
+                $errors = $this->comparator->compare($lhs->current(), $rhs->current());
+                if (count($errors) > 0) {
+                    throw new \UnexpectedValueException('Found differences in nodes', 0, $errors);
                 }
 
                 if ($lhs->hasChildren()) {
                     if ($rhs->hasChildren()) {
                         $this->traverse($lhs->getChildren(), $rhs->getChildren());
                     } else {
-                        throw new \UnexpectedValueException();
+                        throw new \UnexpectedValueException('Missing nodes in other DOMDocument');
                     }
                 }
             } catch (\UnexpectedValueException $exception) {
 //                $lhs->current()->setIsEqual(false);
-                $this->ok = false;
+            } catch (\Exception $exception) {
+                throw $exception;
             } finally {
                 $lhs->next();
                 $rhs->next();

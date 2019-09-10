@@ -14,7 +14,7 @@ class ComparisionErrorList implements \Countable, \IteratorAggregate
     /**
      * @var ComparisionErrorInterface[]
      */
-    protected $list;
+    protected $list = [];
 
     /**
      * @param ComparisionErrorInterface $error

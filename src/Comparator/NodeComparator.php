@@ -54,11 +54,19 @@ class NodeComparator
 
     protected function compareContent(\DOMNode $original, \DOMNode $other)
     {
-        if ($original->C14N() === $other->C14N()) {
+        $originalContent = $original->C14N();
+        $otherContent = $other->C14N();
+
+        if ($originalContent !== $otherContent) {
+            $error = sprintf('Different node content, original: "%s", other: "%s"', mb_substr($originalContent, 0, 256), substr($otherContent, 0, 256));
+            if (mb_strlen($originalContent) > 256 || mb_strlen($otherContent) > 256) {
+                $error .= ' (truncated)';
+            }
+
             return new NodeContentComparisionError(
                 $original,
                 $other,
-                sprintf('Different node content, original: "%s", other: "%s" (truncated)', substr($original->C14N(), 0, 256), substr($other->C14N(), 0, 256))
+                $error
             );
         }
 
