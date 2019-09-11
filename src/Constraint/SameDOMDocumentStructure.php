@@ -40,7 +40,12 @@ class SameDOMDocumentStructure extends Constraint
      */
     protected function matches($other): bool
     {
-        return $this->compareDocuments($this->original, $other);
+        $lhs = new DOMNodeIterator($this->original);
+        $rhs = new DOMNodeIterator($other);
+
+        $result = $this->traverse($lhs, $rhs);
+
+        return false;
     }
 
     /**
@@ -51,14 +56,19 @@ class SameDOMDocumentStructure extends Constraint
         return 'has same DOMDocument structure';
     }
 
-    protected function compareDocuments(\DOMDocument $original, \DOMDocument $other): bool
+    /**
+     * {@inheritDoc}
+     */
+    protected function additionalFailureDescription($other): string
     {
-        $lhs = new DOMNodeIterator($original);
-        $rhs = new DOMNodeIterator($other);
-
-        $result = $this->traverse($lhs, $rhs);
+        return 'Here goes the diff';
     }
 
+    /**
+     * @param DOMNodeIterator $lhs
+     * @param DOMNodeIterator $rhs
+     * @throws \Exception
+     */
     protected function traverse(DOMNodeIterator $lhs, DOMNodeIterator $rhs)
     {
         while ($lhs->valid()) {
