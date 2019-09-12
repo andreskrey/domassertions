@@ -18,10 +18,14 @@ class ComparisionErrorList implements \Countable, \IteratorAggregate
 
     /**
      * @param ComparisionErrorInterface $error
+     *
+     * @return ComparisionErrorList
      */
-    public function addComparisionError(ComparisionErrorInterface $error): void
+    public function addComparisionError(ComparisionErrorInterface $error): self
     {
         $this->list[] = $error;
+
+        return $this;
     }
 
     /**
