@@ -4,20 +4,24 @@ declare(strict_types=1);
 namespace andreskrey\PHPUnit\Comparator;
 
 use andreskrey\PHPUnit\Comparator\Error\NodeNameComparisionError;
-use andreskrey\PHPUnit\Comparator\Error\NodeTypeComparisionError;
+use andreskrey\PHPUnit\Comparator\Error\NodeMissingComparisionError;
 use andreskrey\PHPUnit\Comparator\Error\NodeContentComparisionError;
 use andreskrey\PHPUnit\Comparator\Error\NodeAttributeComparisionError;
 
 class NodeComparator
 {
-    public function compare(\DOMNode $original, \DOMNode $other): ComparisionErrorList
+    public function compare(\DOMNode $original, ?\DOMNode $other): ComparisionErrorList
     {
+        $list = new ComparisionErrorList();
+
+        if (null === $original) {
+            return $list->addComparisionError(new NodeMissingComparisionError($original, 'Missing node to compare'));
+        }
+
         $name = $this->compareNodeName($original, $other);
         $type = $this->compareNodeType($original, $other);
         $content = $this->compareContent($original, $other);
         $attributes = $this->compareAttributes($original, $other);
-
-        $list = new ComparisionErrorList();
 
         foreach (array_filter([$name, $type, $content, $attributes]) as $error) {
             $list->addComparisionError($error);
@@ -42,7 +46,7 @@ class NodeComparator
     protected function compareNodeType(\DOMNode $original, \DOMNode $other)
     {
         if ($original->nodeType !== $other->nodeType) {
-            return new NodeTypeComparisionError(
+            return new NodeMissingComparisionError(
                 $original,
                 $other,
                 sprintf('Different node type, original: "%s", other: "%s"', $original->nodeType, $other->nodeType)

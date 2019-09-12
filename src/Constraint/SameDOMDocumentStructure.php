@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace andreskrey\PHPUnit\Constraint;
 
+use andreskrey\PHPUnit\Comparator\ComparisionErrorList;
 use andreskrey\PHPUnit\Comparator\NodeComparator;
 use andreskrey\PHPUnit\Iterator\DOMNodeIterator;
 use PHPUnit\Framework\Constraint\Constraint;
@@ -24,6 +25,11 @@ class SameDOMDocumentStructure extends Constraint
     protected $comparator;
 
     /**
+     * @var ComparisionErrorList[]
+     */
+    protected $errors = [];
+
+    /**
      * SameDOMDocumentStructure constructor.
      *
      * @param \DOMDocument $document
@@ -43,9 +49,7 @@ class SameDOMDocumentStructure extends Constraint
         $lhs = new DOMNodeIterator($this->original);
         $rhs = new DOMNodeIterator($other);
 
-        $result = $this->traverse($lhs, $rhs);
-
-        return false;
+        return (bool)$this->traverse($lhs, $rhs);
     }
 
     /**
@@ -67,36 +71,29 @@ class SameDOMDocumentStructure extends Constraint
     /**
      * @param DOMNodeIterator $lhs
      * @param DOMNodeIterator $rhs
-     * @throws \Exception
+     * @return mixed
      */
     protected function traverse(DOMNodeIterator $lhs, DOMNodeIterator $rhs)
     {
         while ($lhs->valid()) {
-            try {
-                if (null === $rhs->current()) {
-                    throw new \UnexpectedValueException();
-                }
-
-                $errors = $this->comparator->compare($lhs->current(), $rhs->current());
-                if (count($errors) > 0) {
-                    throw new \UnexpectedValueException('Found differences in nodes', 0, $errors);
-                }
-
-                if ($lhs->hasChildren()) {
-                    if ($rhs->hasChildren()) {
-                        $this->traverse($lhs->getChildren(), $rhs->getChildren());
-                    } else {
-                        throw new \UnexpectedValueException('Missing nodes in other DOMDocument');
-                    }
-                }
-            } catch (\UnexpectedValueException $exception) {
-//                $lhs->current()->setIsEqual(false);
-            } catch (\Exception $exception) {
-                throw $exception;
-            } finally {
-                $lhs->next();
-                $rhs->next();
+            $errors = $this->comparator->compare($lhs->current(), $rhs->current());
+            if (count($errors) > 0) {
+                $this->errors[] = $errors;
             }
+
+            if ($lhs->hasChildren()) {
+                if ($rhs->hasChildren()) {
+                    $this->traverse($lhs->getChildren(), $rhs->getChildren());
+                } else {
+                    // How to get the error here
+                    throw new \UnexpectedValueException('Missing nodes in other DOMDocument');
+                }
+            }
+
+            $lhs->next();
+            $rhs->next();
         }
+
+        return $this->errors;
     }
 }

@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace andreskrey\PHPUnit\Iterator;
 
-use andreskrey\PHPUnit\Entity\ComparableEntity;
-
 class DOMNodeIterator implements \RecursiveIterator
 {
     /**
@@ -27,7 +25,7 @@ class DOMNodeIterator implements \RecursiveIterator
      */
     public function current()
     {
-        if ($this->node->childNodes->length > $this->cursor) {
+        if ($this->valid()) {
             return $this->node->childNodes->item($this->cursor);
         }
 
