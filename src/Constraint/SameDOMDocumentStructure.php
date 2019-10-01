@@ -49,7 +49,7 @@ class SameDOMDocumentStructure extends Constraint
         $lhs = new DOMNodeIterator($this->original);
         $rhs = new DOMNodeIterator($other);
 
-        return (bool)$this->traverse($lhs, $rhs);
+        return 0 === count($this->traverse($lhs, $rhs));
     }
 
     /**
@@ -71,12 +71,16 @@ class SameDOMDocumentStructure extends Constraint
     /**
      * @param DOMNodeIterator $lhs
      * @param DOMNodeIterator $rhs
-     * @return mixed
+     *
+     * @return array List of discrepancies between Nodes, if any
      */
     protected function traverse(DOMNodeIterator $lhs, DOMNodeIterator $rhs)
     {
         while ($lhs->valid()) {
-            $errors = $this->comparator->compare($lhs->current(), $rhs->current());
+            $original = $lhs->current();
+            $other = $rhs->current();
+            $errors = $this->comparator->compare($original, $other);
+
             if (count($errors) > 0) {
                 $this->errors[] = $errors;
             }
@@ -85,8 +89,7 @@ class SameDOMDocumentStructure extends Constraint
                 if ($rhs->hasChildren()) {
                     $this->traverse($lhs->getChildren(), $rhs->getChildren());
                 } else {
-                    // How to get the error here
-                    throw new \UnexpectedValueException('Missing nodes in other DOMDocument');
+                    $this->errors[] = $this->comparator->compare($original, null);
                 }
             }
 

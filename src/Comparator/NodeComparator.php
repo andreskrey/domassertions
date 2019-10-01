@@ -7,6 +7,7 @@ use andreskrey\PHPUnit\Comparator\Error\NodeNameComparisionError;
 use andreskrey\PHPUnit\Comparator\Error\NodeMissingComparisionError;
 use andreskrey\PHPUnit\Comparator\Error\NodeContentComparisionError;
 use andreskrey\PHPUnit\Comparator\Error\NodeAttributeComparisionError;
+use andreskrey\PHPUnit\Comparator\Error\NodeTypeComparisionError;
 
 class NodeComparator
 {
@@ -14,7 +15,7 @@ class NodeComparator
     {
         $list = new ComparisionErrorList();
 
-        if (null === $original) {
+        if (null === $other) {
             return $list->addComparisionError(new NodeMissingComparisionError($original, 'Missing node to compare'));
         }
 
@@ -46,7 +47,7 @@ class NodeComparator
     protected function compareNodeType(\DOMNode $original, \DOMNode $other)
     {
         if ($original->nodeType !== $other->nodeType) {
-            return new NodeMissingComparisionError(
+            return new NodeTypeComparisionError(
                 $original,
                 $other,
                 sprintf('Different node type, original: "%s", other: "%s"', $original->nodeType, $other->nodeType)
@@ -58,6 +59,8 @@ class NodeComparator
 
     protected function compareContent(\DOMNode $original, \DOMNode $other)
     {
+        // how the crap can we compare contents ignoring the nested tags
+        return null;
         $originalContent = $original->C14N();
         $otherContent = $other->C14N();
 

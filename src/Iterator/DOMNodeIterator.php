@@ -45,9 +45,13 @@ class DOMNodeIterator implements \RecursiveIterator
      */
     public function hasChildren(): bool
     {
-        $DOMNodeList = $this->current()->childNodes;
+        if ($this->valid()) {
+            $DOMNodeList = $this->current()->childNodes;
 
-        return is_null($DOMNodeList) ? false : (bool)$DOMNodeList->length;
+            return !is_null($DOMNodeList);
+        }
+
+        return false;
     }
 
     /**
