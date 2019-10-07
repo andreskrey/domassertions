@@ -1,17 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace andreskrey\PHPUnit\Constraint;
 
 use andreskrey\PHPUnit\Comparator\ComparatorInterface;
 use andreskrey\PHPUnit\Comparator\ComparisionErrorList;
-use andreskrey\PHPUnit\Comparator\NodeComparator;
 use andreskrey\PHPUnit\Iterator\DOMNodeIterator;
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**
- * Class SameDOMDocumentStructure
- * @package andreskrey\PHPUnit\Constraint
+ * Class SameDOMDocumentStructure.
  */
 class SameDOMDocumentStructure extends Constraint
 {
@@ -33,7 +32,7 @@ class SameDOMDocumentStructure extends Constraint
     /**
      * SameDOMDocumentStructure constructor.
      *
-     * @param \DOMDocument $document
+     * @param \DOMDocument        $document
      * @param ComparatorInterface $comparator
      */
     public function __construct(\DOMDocument $document, ComparatorInterface $comparator)
@@ -43,7 +42,7 @@ class SameDOMDocumentStructure extends Constraint
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function matches($other): bool
     {
@@ -54,7 +53,7 @@ class SameDOMDocumentStructure extends Constraint
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toString(): string
     {
@@ -62,7 +61,7 @@ class SameDOMDocumentStructure extends Constraint
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function additionalFailureDescription($other): string
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace andreskrey\Tests\PHPUnit;
@@ -13,6 +14,7 @@ class DOMDocumentComparatorTest extends TestCase
 
     /**
      * @dataProvider equalDocumentsDataProvider
+     *
      * @param string $original
      * @param string $other
      */
@@ -30,6 +32,5 @@ class DOMDocumentComparatorTest extends TestCase
 
     public function testDOMDocumentsAreNotEqual()
     {
-
     }
 }

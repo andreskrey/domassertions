@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace andreskrey\PHPUnit\Iterator;
@@ -6,7 +7,7 @@ namespace andreskrey\PHPUnit\Iterator;
 class DOMNodeIterator implements \RecursiveIterator
 {
     /**
-     * @var \DOMNode $node
+     * @var \DOMNode
      */
     protected $node;
 
@@ -21,7 +22,7 @@ class DOMNodeIterator implements \RecursiveIterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -33,7 +34,7 @@ class DOMNodeIterator implements \RecursiveIterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function next(): void
     {
@@ -41,7 +42,7 @@ class DOMNodeIterator implements \RecursiveIterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hasChildren(): bool
     {
@@ -56,8 +57,11 @@ class DOMNodeIterator implements \RecursiveIterator
 
     /**
      * Returns an iterator for the current entry.
-     * @link https://php.net/manual/en/recursiveiterator.getchildren.php
-     * @return \RecursiveIterator An iterator for the current entry.
+     *
+     * @see https://php.net/manual/en/recursiveiterator.getchildren.php
+     *
+     * @return \RecursiveIterator an iterator for the current entry
+     *
      * @since 5.1.0
      */
     public function getChildren(): self
@@ -66,7 +70,7 @@ class DOMNodeIterator implements \RecursiveIterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function key(): \DOMNode
     {
@@ -74,7 +78,7 @@ class DOMNodeIterator implements \RecursiveIterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function valid(): bool
     {
@@ -86,7 +90,7 @@ class DOMNodeIterator implements \RecursiveIterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function rewind(): void
     {

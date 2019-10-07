@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace andreskrey\PHPUnit;
@@ -7,15 +8,14 @@ use andreskrey\PHPUnit\Comparator\NodeComparator;
 use PHPUnit\Framework\Assert;
 
 /**
- * Trait DOMDocumentAssertions
- * @package andreskrey\PHPUnit
+ * Trait DOMDocumentAssertions.
  */
 trait DOMDocumentAssertions
 {
     /**
      * @param \DOMDocument $expected
      * @param \DOMDocument $actual
-     * @param string $message
+     * @param string       $message
      */
     public static function assertDOMDocumentHasSameStructure(\DOMDocument $expected, \DOMDocument $actual, string $message = ''): void
     {

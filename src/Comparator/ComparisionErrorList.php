@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace andreskrey\PHPUnit\Comparator;
@@ -6,8 +7,7 @@ namespace andreskrey\PHPUnit\Comparator;
 use andreskrey\PHPUnit\Comparator\Error\ComparisionErrorInterface;
 
 /**
- * Class ComparisionErrorList
- * @package andreskrey\PHPUnit\Comparator\Error
+ * Class ComparisionErrorList.
  */
 class ComparisionErrorList implements \Countable, \IteratorAggregate
 {
@@ -37,7 +37,7 @@ class ComparisionErrorList implements \Countable, \IteratorAggregate
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -45,7 +45,7 @@ class ComparisionErrorList implements \Countable, \IteratorAggregate
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator(): \Generator
     {
