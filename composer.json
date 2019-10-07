@@ -19,7 +19,8 @@
   },
   "autoload": {
     "psr-4": {
-      "andreskrey\\PHPUnit\\": "src/"
+      "andreskrey\\PHPUnit\\": "src/",
+      "andreskrey\\Tests\\PHPUnit\\": "tests/"
     }
   }
 }
