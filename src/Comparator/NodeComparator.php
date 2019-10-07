@@ -9,7 +9,7 @@ use andreskrey\PHPUnit\Comparator\Error\NodeContentComparisionError;
 use andreskrey\PHPUnit\Comparator\Error\NodeAttributeComparisionError;
 use andreskrey\PHPUnit\Comparator\Error\NodeTypeComparisionError;
 
-class NodeComparator
+class NodeComparator implements ComparatorInterface
 {
     public function compare(\DOMNode $original, ?\DOMNode $other): ComparisionErrorList
     {

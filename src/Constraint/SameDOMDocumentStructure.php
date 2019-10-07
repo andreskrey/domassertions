@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace andreskrey\PHPUnit\Constraint;
 
+use andreskrey\PHPUnit\Comparator\ComparatorInterface;
 use andreskrey\PHPUnit\Comparator\ComparisionErrorList;
 use andreskrey\PHPUnit\Comparator\NodeComparator;
 use andreskrey\PHPUnit\Iterator\DOMNodeIterator;
@@ -20,7 +21,7 @@ class SameDOMDocumentStructure extends Constraint
     protected $original;
 
     /**
-     * @var NodeComparator
+     * @var ComparatorInterface
      */
     protected $comparator;
 
@@ -33,9 +34,9 @@ class SameDOMDocumentStructure extends Constraint
      * SameDOMDocumentStructure constructor.
      *
      * @param \DOMDocument $document
-     * @param NodeComparator $comparator
+     * @param ComparatorInterface $comparator
      */
-    public function __construct(\DOMDocument $document, NodeComparator $comparator)
+    public function __construct(\DOMDocument $document, ComparatorInterface $comparator)
     {
         $this->original = $document;
         $this->comparator = $comparator;
