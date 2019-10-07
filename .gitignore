@@ -1,4 +1,13 @@
+# Basic stuff
+composer.lock
 .idea
 vendor
-test.php
-composer.lock
+
+# Test stuff
+test*.php
+test*.html
+
+# PHP CS Fixer stuff
+.php_cs.cache
+.phpunit.result.cache
+php-cs-fixer
