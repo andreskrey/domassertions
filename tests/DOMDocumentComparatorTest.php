@@ -30,7 +30,21 @@ class DOMDocumentComparatorTest extends TestCase
         $this->assertTrue($constraint->matches($otherDOM));
     }
 
-    public function testDOMDocumentsAreNotEqual()
+    /**
+     * @dataProvider nonEqualDocumentsDataProvider
+     *
+     * @param string $original
+     * @param string $other
+     */
+    public function testDOMDocumentsAreNotEqual(string $original, string $other)
     {
+        $originalDOM = new \DOMDocument();
+        $originalDOM->loadHTML($original);
+        $otherDOM = new \DOMDocument();
+        $otherDOM->loadHTML($other);
+
+        $constraint = new DOMDocumentComparator($originalDOM, new NodeComparator());
+
+        $this->assertFalse($constraint->matches($otherDOM));
     }
 }
